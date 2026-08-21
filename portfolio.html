@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Gallery | J.K. Photography - HSR Layout, Bangalore</title>
+    <meta name="description" content="Explore J.K. Photography's visual portfolio. Filter by Weddings, Pre-Wedding, Newborn & Baby, Events, Portraits, and Fashion shoots.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-bar">
+        <div class="top-container">
+            <div class="top-info">
+                <span><i class="fa-solid fa-location-dot"></i> #532, 23rd Main, 22nd Cross, 2nd Sector, HSR Layout, Bangalore</span>
+                <a href="mailto:jkphotographyhsr@gmail.com"><i class="fa-solid fa-envelope"></i> jkphotographyhsr@gmail.com</a>
+            </div>
+            <div class="top-actions">
+                <span class="social-label">Contacts:</span>
+                <a href="tel:8553213240" class="top-phone"><i class="fa-solid fa-phone"></i> Anand A: +91 85532 13240</a>
+                <a href="tel:9035733637" class="top-phone"><i class="fa-solid fa-phone"></i> Prasanna Kumar: +91 90357 33637</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="main-header" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo-box">
+                <img src="images/logo.png" alt="J.K. Photography Official Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="brand-title">J.K. PHOTOGRAPHY</span>
+                    <span class="brand-sub">THE PHOTOGRAPHY EXPERTS &bull; HSR BRANCH</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="navMenu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="services.html#studio-shoots">Studio Shoots</a>
+                <a href="services.html">Services</a>
+                <a href="portfolio.html" class="active">Portfolio</a>
+                <a href="gifts.html">Same Gifts</a>
+                <a href="packages.html">Packages</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <div class="header-cta">
+                <button class="btn btn-gold" id="openBookingBtn">
+                    <i class="fa-solid fa-calendar-check"></i> BOOK NOW
+                </button>
+                <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle Navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Hero -->
+    <div class="page-hero">
+        <span class="section-subtitle">Visual Masterpieces</span>
+        <h1 class="gold-gradient-text">OUR GALLERY PORTFOLIO</h1>
+        <div class="breadcrumbs">
+            <a href="index.html">Home</a> / <span>Portfolio</span>
+        </div>
+    </div>
+
+    <!-- Portfolio Gallery Section -->
+    <section class="section portfolio-section">
+        <div class="container">
+            <!-- Portfolio Category Filter Tabs -->
+            <div class="portfolio-filters">
+                <button class="filter-btn active" data-filter="all">All Works</button>
+                <button class="filter-btn" data-filter="weddings">Weddings</button>
+                <button class="filter-btn" data-filter="prewedding">Pre-Wedding</button>
+                <button class="filter-btn" data-filter="baby">Baby & Family</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+                <button class="filter-btn" data-filter="portraits">Portraits</button>
+                <button class="filter-btn" data-filter="fashion">Fashion</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="portfolio-grid" id="portfolioGrid">
+                <div class="portfolio-item weddings" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80" alt="Royal Wedding Ceremony">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                            <span>Weddings</span>
+                            <h4>Royal Indian Bridal Ceremony</h4>
+                        </div>
+                        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item prewedding" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" alt="Romantic Pre-Wedding Shoot">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                            <span>Pre-Wedding</span>
+                            <h4>Sunset Romantic Trail</h4>
+                        </div>
+                        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item baby" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1555252333-9f8e92e65df9?auto=format&fit=crop&w=800&q=80" alt="Cute Newborn Portrait">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                            <span>Baby & Family</span>
+                            <h4>Newborn Sleeping Angel</h4>
+                        </div>
+                        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item prewedding" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="Pre-Wedding Couple">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                            <span>Pre-Wedding</span>
+                            <h4>Mountain View Romance</h4>
+                        </div>
+                        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item portraits fashion" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" alt="High Fashion Portrait">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                            <span>Portraits & Fashion</span>
+                            <h4>Glamour Studio Shoot</h4>
+                        </div>
+                        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                </div>
+
+                <div class="portfolio-item events" onclick="openLightbox(this)">
+                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80" alt="Grand Evening Reception">
+                    <div class="portfolio-overlay">
+                        <div class="portfolio-info">
+                            <span>Events</span>
+                            <h4>Grand Reception Night</h4>
+                        </div>
+                        <div class="zoom-icon"><i class="fa-solid fa-expand"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo-box">
+                        <img src="images/logo.png" alt="J.K. Photography Official Logo" class="logo-img">
+                        <div class="logo-text">
+                            <span class="brand-title">J.K. PHOTOGRAPHY</span>
+                            <span class="brand-sub">THE PHOTOGRAPHY EXPERTS</span>
+                        </div>
+                    </div>
+                    <p>Capturing your special moments and turning them into timeless memories since 2005.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h5>QUICK LINKS</h5>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="gifts.html">Same Gifts</a></li>
+                        <li><a href="packages.html">Packages</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="admin.html" style="color: var(--gold-primary); font-weight: 600;"><i class="fa-solid fa-lock"></i> Admin CMS Panel</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-links">
+                    <h5>OUR SERVICES</h5>
+                    <ul>
+                        <li><a href="services.html">Wedding Photography</a></li>
+                        <li><a href="services.html">Pre-Wedding Shoot</a></li>
+                        <li><a href="services.html">Baby & Family Photography</a></li>
+                        <li><a href="services.html">Portraits & Fashion</a></li>
+                        <li><a href="services.html">Events & Corporate</a></li>
+                        <li><a href="services.html">Product Photography</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-qr">
+                    <h5>CONTACT & CONNECT</h5>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">
+                        Anand A: +91 85532 13240<br>
+                        Prasanna Kumar J.K: +91 90357 33637
+                    </p>
+                    <div class="qr-box">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://wa.me/918553213240" alt="Scan QR Code to Connect">
+                        <span>Scan QR to Chat on WhatsApp</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2005 - 2026 J.K. Photography HSR Branch. All Rights Reserved.</p>
+                <p>Designed with <i class="fa-solid fa-heart gold-gradient-text"></i> for your special moments</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-widgets">
+        <a href="https://wa.me/918553213240?text=Hello%20JK%20Photography,%20I%20want%20to%20enquire%20about%20your%20services." target="_blank" class="floating-btn whatsapp-float" aria-label="Chat on WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="tooltip">Chat on WhatsApp</span>
+        </a>
+        <a href="tel:8553213240" class="floating-btn call-float" aria-label="Call Studio">
+            <i class="fa-solid fa-phone"></i>
+            <span class="tooltip">Call Anand A</span>
+        </a>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightboxModal">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-img" id="lightboxImg" src="" alt="Gallery Preview">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeBookingModal()">&times;</button>
+            <div class="modal-header">
+                <i class="fa-solid fa-calendar-star gold-icon"></i>
+                <h3>BOOK YOUR PHOTOGRAPHY SESSION</h3>
+                <p>Select your date and service to reserve your shoot.</p>
+            </div>
+            <form onsubmit="handleModalBooking(event)">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="modalName" required placeholder="Full Name">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="modalPhone" required placeholder="Mobile Number">
+                </div>
+                <div class="form-group">
+                    <label>Event Date *</label>
+                    <input type="date" id="modalDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Service *</label>
+                    <select id="modalService" required>
+                        <optgroup label="Indoor Studio Shoots">
+                            <option value="Newborn Baby Shoot">Newborn Baby Shoot</option>
+                            <option value="Maternity Studio Shoot">Maternity Studio Shoot</option>
+                            <option value="Family Studio Shoot">Family Studio Shoot</option>
+                            <option value="Kids Studio Shoot">Kids Studio Shoot</option>
+                            <option value="Modeling Shoot">Modeling Shoot</option>
+                            <option value="Product Shoot">Product Shoot</option>
+                        </optgroup>
+                        <optgroup label="Outdoor Shoots">
+                            <option value="Maternity Outdoor Shoot">Maternity Outdoor Shoot</option>
+                            <option value="Family Outdoor Shoot">Family Outdoor Shoot</option>
+                            <option value="Kids Outdoor Shoot">Kids Outdoor Shoot</option>
+                            <option value="Couple Shoot">Couple Shoot</option>
+                        </optgroup>
+                        <optgroup label="Matrimonial & Portraits">
+                            <option value="Matrimonial Boy Shoot">Matrimonial Boy Shoot</option>
+                            <option value="Matrimonial Girl Shoot">Matrimonial Girl Shoot</option>
+                            <option value="Matrimonial Couple Shoot">Matrimonial Couple Shoot</option>
+                            <option value="Profile Shoot - Boy">Profile Shoot – Boy</option>
+                            <option value="Profile Shoot - Girl">Profile Shoot – Girl</option>
+                        </optgroup>
+                        <optgroup label="Theme & Cultural Shoots">
+                            <option value="Krishna Janmashtami Shoot">Krishna Janmashtami Shoot</option>
+                            <option value="80s Retro Theme Shoot">80s Retro Theme Shoot</option>
+                            <option value="Bharatanatyam Shoot">Bharatanatyam Shoot</option>
+                        </optgroup>
+                        <optgroup label="Weddings & Events">
+                            <option value="Wedding Photography" selected>Wedding Photography</option>
+                            <option value="Pre-Wedding Shoot">Pre-Wedding Shoot</option>
+                            <option value="Events & Corporate">Events & Corporate</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-gold full-width">
+                    <i class="fa-brands fa-whatsapp"></i> CONFIRM VIA WHATSAPP
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Festive / Promotional Popup Banner Modal -->
+    <div class="promo-popup-modal" id="promoPopupModal">
+        <div class="promo-popup-content">
+            <button class="promo-close-btn" onclick="closePromoPopup()" aria-label="Close Popup">&times;</button>
+            <a href="https://wa.me/918553213240?text=Hello%20JK%20Photography,%20I%20saw%20your%20Varamahalakshmi%20festive%20offer%20banner%20and%20want%20to%20enquire." target="_blank" id="promoBannerLink" class="promo-banner-link">
+                <img id="promoBannerImg" src="images/popup_banner.jpg" alt="Festive Special Offer Banner">
+            </a>
+            <div class="promo-footer-actions">
+                <a href="https://wa.me/918553213240?text=Hello%20JK%20Photography,%20I%20saw%20your%20Varamahalakshmi%20festive%20offer%20banner%20and%20want%20to%20enquire." target="_blank" id="promoWhatsAppBtn" class="promo-cta-btn">
+                    <i class="fa-brands fa-whatsapp"></i> ENQUIRE ON WHATSAPP
+                </a>
+                <button class="promo-dismiss-btn" onclick="closePromoPopup()">Close &bull; Continue to Site</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase JS Client & DB Engine -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
