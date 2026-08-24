@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Cloud CMS Admin Panel | J.K. Photography Studio</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Supabase JS CDN Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body style="background: #09090b;">
+
+    <!-- Login Container (Shown if not authenticated) -->
+    <div class="admin-login-wrapper" id="loginWrapper">
+        <div class="admin-login-card text-center">
+            <img src="images/logo.png" alt="Logo" class="logo-img" style="margin: 0 auto 20px; height: 65px; width: auto; background: #ffffff; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--gold-primary);">
+            <h3 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 8px;">SUPABASE CMS LOGIN</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 25px;">Enter your admin password to manage cloud database, pages, text & storage.</p>
+            
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group text-left">
+                    <label style="display: block; text-align: left;">Admin Password</label>
+                    <input type="password" id="adminPass" required placeholder="Enter password (default: admin)">
+                </div>
+                <button type="submit" class="btn btn-gold full-width margin-top-40" id="loginSubmitBtn">
+                    <i class="fa-solid fa-lock-open"></i> LOGIN TO CLOUD DASHBOARD
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Shown after login) -->
+    <div id="adminDashboard" style="display: none;">
+        <!-- Admin Header Navbar -->
+        <header class="main-header" style="background: #060608;">
+            <div class="nav-container">
+                <div class="logo-box">
+                    <img src="images/logo.png" alt="J.K. Photography Logo" class="logo-img">
+                    <div class="logo-text">
+                        <span class="brand-title">SUPABASE CLOUD CMS</span>
+                        <span class="brand-sub">J.K. PHOTOGRAPHY &bull; HSR BRANCH</span>
+                    </div>
+                </div>
+                <div class="header-cta">
+                    <span style="font-size: 0.8rem; color: #7ef5a6; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-circle" style="font-size: 0.55rem;"></i> Database Connected
+                    </span>
+                    <a href="index.html" target="_blank" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8rem;">
+                        <i class="fa-solid fa-globe"></i> View Live Site
+                    </a>
+                    <button class="btn btn-danger" onclick="handleAdminLogout()" style="padding: 8px 16px; font-size: 0.8rem;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container section" style="padding-top: 30px;">
+            <div class="admin-dashboard-layout">
+                <!-- Mobile Admin Section Dropdown Trigger (Shown only on mobile & tablets) -->
+                <div class="admin-mobile-dropdown-bar">
+                    <button type="button" class="admin-mobile-toggle-btn" onclick="toggleAdminMobileNav()" id="adminMenuDropdownBtn">
+                        <span id="adminActiveTabDisplay"><i class="fa-solid fa-bullhorn"></i> 0. Festive Popup Banner</span>
+                        <span class="admin-menu-tag"><i class="fa-solid fa-bars-staggered"></i> MENU</span>
+                    </button>
+                </div>
+
+                <!-- Sidebar Menu (Desktop Column / Mobile Dropdown Drawer) -->
+                <aside class="admin-sidebar" id="adminSidebar">
+                    <div class="admin-sidebar-header-mobile">
+                        <span><i class="fa-solid fa-list-check"></i> CHOOSE MANAGER SECTION</span>
+                        <button type="button" class="close-admin-nav-btn" onclick="toggleAdminMobileNav()">&times;</button>
+                    </div>
+                    <button class="admin-nav-btn active" onclick="switchAdminTab('tabPopupBanner', this)">
+                        <i class="fa-solid fa-bullhorn"></i> 0. Festive Popup Banner
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabContacts', this)">
+                        <i class="fa-solid fa-address-book"></i> General & Contacts
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabLogo', this)">
+                        <i class="fa-solid fa-image"></i> Studio Logo Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabHome', this)">
+                        <i class="fa-solid fa-house"></i> 1. Home Page Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabAbout', this)">
+                        <i class="fa-solid fa-circle-info"></i> 2. About Us Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabServices', this)">
+                        <i class="fa-solid fa-camera-retro"></i> 3. Services Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabShoots', this)">
+                        <i class="fa-solid fa-camera"></i> 3.1 Shoot Categories (18)
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabPortfolio', this)">
+                        <i class="fa-solid fa-images"></i> 4. Portfolio Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabGifts', this)">
+                        <i class="fa-solid fa-gift"></i> 5. Same Gifts Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabPackages', this)">
+                        <i class="fa-solid fa-boxes-packing"></i> 6. Packages Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabContactPage', this)">
+                        <i class="fa-solid fa-envelope"></i> 7. Contact Page Manager
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabBookings', this)">
+                        <i class="fa-solid fa-calendar-check"></i> Enquiries & Bookings
+                    </button>
+                    <button class="admin-nav-btn" onclick="switchAdminTab('tabSecurity', this)">
+                        <i class="fa-solid fa-key"></i> Change Admin Password
+                    </button>
+                </aside>
+
+                <!-- Content Area -->
+                <main class="admin-content-area">
+                    <!-- Tab 0: Festive / Promotional Popup Banner Manager -->
+                    <div class="admin-tab-pane active" id="tabPopupBanner">
+                        <h3>Festive &amp; Promotional Popup Banner (Supabase DB &amp; Storage)</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 25px;">Control the greeting/offer popup banner that appears when visitors open your website. Upload any festival or discount banner image (e.g. Varamahalakshmi, Diwali, New Year).</p>
+                        
+                        <form onsubmit="savePopupBannerSettings(event)">
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--gold-light); font-weight: 700; font-size: 1rem;">
+                                    <input type="checkbox" id="editPopupEnabled" style="width: 20px; height: 20px; accent-color: var(--gold-primary);">
+                                    Enable Festive / Offer Popup on Website Open
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Banner Campaign Title / Note</label>
+                                <input type="text" id="editPopupTitle" placeholder="e.g. Happy Varamahalakshmi Wishes & Offers">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Current Active Popup Banner Preview</label>
+                                <div>
+                                    <img id="popupBannerPreview" src="images/popup_banner.jpg" alt="Popup Banner Preview" style="max-height: 240px; max-width: 100%; border-radius: 8px; border: 2px solid var(--gold-primary); background: #000; display: block; margin-bottom: 15px;">
+                                </div>
+                                <label>Upload New Banner Graphic (JPG / PNG)</label>
+                                <input type="file" id="popupBannerFile" accept="image/*">
+                            </div>
+
+                            <div class="form-group">
+                                <label>WhatsApp Button Action Link / Custom Message</label>
+                                <textarea id="editPopupLink" rows="2" placeholder="https://wa.me/918553213240?text=..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" id="savePopupBannerBtn">
+                                <i class="fa-solid fa-floppy-disk"></i> SAVE POPUP BANNER TO SUPABASE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 1: General & Contacts -->
+                    <div class="admin-tab-pane" id="tabContacts">
+                        <h3>General Business & Contact Details (Supabase DB)</h3>
+                        <form onsubmit="saveContactSettings(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Anand A Phone Number</label>
+                                    <input type="text" id="editAnandPhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Prasanna Kumar Phone Number</label>
+                                    <input type="text" id="editPrasannaPhone" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Studio Email Address</label>
+                                <input type="email" id="editEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Full Studio Address</label>
+                                <textarea id="editAddress" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gold" id="saveContactsBtn">
+                                <i class="fa-solid fa-floppy-disk"></i> SAVE CONTACT DETAILS TO CLOUD
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 2: Logo Manager -->
+                    <div class="admin-tab-pane" id="tabLogo">
+                        <h3>Upload & Replace Studio Logo (Supabase Storage)</h3>
+                        <form onsubmit="saveLogoUpload(event)">
+                            <div class="form-group">
+                                <label>Current Logo Preview</label>
+                                <div>
+                                    <img id="logoPreview" src="images/logo.png" alt="Logo Preview" style="height: 80px; width: auto; border-radius: 6px; border: 1px solid var(--gold-primary); background: #ffffff; padding: 5px;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Upload New Logo Image (JPG / PNG)</label>
+                                <input type="file" id="logoFile" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-gold" id="saveLogoBtn">
+                                <i class="fa-solid fa-upload"></i> UPLOAD TO SUPABASE STORAGE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 3: Home Page Manager -->
+                    <div class="admin-tab-pane" id="tabHome">
+                        <h3>Home Page (`index.html`) Content & Hero 3-Photo Auto Slider</h3>
+                        <form onsubmit="saveHomeSettings(event)">
+                            <div class="form-group">
+                                <label>Hero Main Title</label>
+                                <textarea id="editHeroTitle" rows="2" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Hero Subtitle Text</label>
+                                <input type="text" id="editHeroSubtitle" required>
+                            </div>
+
+                            <div style="margin: 25px 0 15px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                                <h4 style="color: var(--gold-light); margin-bottom: 6px;">
+                                    <i class="fa-solid fa-images"></i> Hero Auto-Slide Banner Photos (5-Second Slideshow)
+                                </h4>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+                                    Upload up to 3 high-resolution background photos for the main hero banner slideshow.
+                                </p>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+                                    
+                                    <!-- Photo 1 -->
+                                    <div style="background: var(--bg-surface); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                        <label style="font-weight: 700; color: var(--gold-light); display: block; margin-bottom: 8px;">
+                                            <i class="fa-solid fa-image"></i> Slide 1 Photo
+                                        </label>
+                                        <div style="text-align: center; margin-bottom: 12px;">
+                                            <img id="homeBannerPreview1" src="" alt="Slide 1 Preview" style="width: 100%; height: 130px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);">
+                                        </div>
+                                        <label style="font-size: 0.8rem;">Change Slide 1:</label>
+                                        <input type="file" id="editHeroImgFile1" accept="image/*" style="font-size: 0.85rem;">
+                                    </div>
+
+                                    <!-- Photo 2 -->
+                                    <div style="background: var(--bg-surface); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                        <label style="font-weight: 700; color: var(--gold-light); display: block; margin-bottom: 8px;">
+                                            <i class="fa-solid fa-image"></i> Slide 2 Photo
+                                        </label>
+                                        <div style="text-align: center; margin-bottom: 12px;">
+                                            <img id="homeBannerPreview2" src="" alt="Slide 2 Preview" style="width: 100%; height: 130px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);">
+                                        </div>
+                                        <label style="font-size: 0.8rem;">Change Slide 2:</label>
+                                        <input type="file" id="editHeroImgFile2" accept="image/*" style="font-size: 0.85rem;">
+                                    </div>
+
+                                    <!-- Photo 3 -->
+                                    <div style="background: var(--bg-surface); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color);">
+                                        <label style="font-weight: 700; color: var(--gold-light); display: block; margin-bottom: 8px;">
+                                            <i class="fa-solid fa-image"></i> Slide 3 Photo
+                                        </label>
+                                        <div style="text-align: center; margin-bottom: 12px;">
+                                            <img id="homeBannerPreview3" src="" alt="Slide 3 Preview" style="width: 100%; height: 130px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);">
+                                        </div>
+                                        <label style="font-size: 0.8rem;">Change Slide 3:</label>
+                                        <input type="file" id="editHeroImgFile3" accept="image/*" style="font-size: 0.85rem;">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-gold" id="saveHomeBtn" style="margin-top: 10px;">
+                                <i class="fa-solid fa-floppy-disk"></i> SAVE HERO BANNER & HOME PAGE TO SUPABASE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 4: About Us Manager -->
+                    <div class="admin-tab-pane" id="tabAbout">
+                        <h3>About Us Page (`about.html`) Content & Founders</h3>
+                        <form onsubmit="saveAboutSettings(event)">
+                            <div class="form-group">
+                                <label>About Heading Title</label>
+                                <input type="text" id="editAboutTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label>About Story Description Paragraph</label>
+                                <textarea id="editAboutStory" rows="4" required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Founder 1 Name & Role</label>
+                                    <input type="text" id="editFounder1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Founder 2 Name & Role</label>
+                                    <input type="text" id="editFounder2" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Story Photo Preview</label>
+                                <div>
+                                    <img id="aboutImgPreview" src="" alt="About Photo" style="max-height: 140px; border-radius: 6px; border: 1px solid var(--gold-primary); margin-bottom: 10px;">
+                                </div>
+                                <label>Upload New Story Photo</label>
+                                <input type="file" id="editAboutImgFile" accept="image/*">
+                            </div>
+                            <button type="submit" class="btn btn-gold" id="saveAboutBtn">
+                                <i class="fa-solid fa-floppy-disk"></i> SAVE ABOUT US PAGE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 5: Services Manager -->
+                    <div class="admin-tab-pane" id="tabServices">
+                        <h3>Services Page (`services.html`) Manager</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 25px;">Add new general photography services, edit existing service titles/descriptions, or delete services directly in Supabase DB.</p>
+                        
+                        <!-- Add New Service Box -->
+                        <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--gold-primary); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                            <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;"><i class="fa-solid fa-plus-circle"></i> ADD NEW PHOTOGRAPHY SERVICE</h4>
+                            <form onsubmit="addNewServiceItem(event)" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Service Title *</label>
+                                    <input type="text" id="newServiceTitle" required placeholder="e.g. Drone Videography">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Short Description *</label>
+                                    <input type="text" id="newServiceDesc" required placeholder="e.g. 4K Aerial coverage...">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Thumbnail Image *</label>
+                                    <input type="file" id="newServiceImgFile" accept="image/*" required>
+                                </div>
+                                <button type="submit" class="btn btn-gold" id="addServiceBtn" style="height: 44px; white-space: nowrap;">
+                                    <i class="fa-solid fa-plus"></i> ADD SERVICE
+                                </button>
+                            </form>
+                        </div>
+
+                        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;">EXISTING PHOTOGRAPHY SERVICES (SUPABASE)</h4>
+                        <div id="adminServicesList">
+                            <!-- Populated dynamically from Supabase -->
+                        </div>
+                    </div>
+
+                    <!-- Tab 5.1: Shoot Categories Manager (18 Specialized Categories) -->
+                    <div class="admin-tab-pane" id="tabShoots">
+                        <h3>Indoor Studio & Specialized Shoot Categories</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 25px;">Manage all specialized shoot cards, descriptions, tags, and photos stored in Supabase PostgreSQL.</p>
+                        
+                        <!-- Add New Shoot Category Box -->
+                        <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--gold-primary); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                            <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;"><i class="fa-solid fa-plus-circle"></i> ADD NEW SPECIALIZED SHOOT CARD</h4>
+                            <form onsubmit="addNewShootCategory(event)" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Shoot Title *</label>
+                                    <input type="text" id="newShootTitle" required placeholder="e.g. Welcome Wedding Entry Shoot">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Shoot Location Badge *</label>
+                                    <select id="newShootLocation" required>
+                                        <option value="Indoor Studio">Indoor Studio</option>
+                                        <option value="Outdoor Shoot">Outdoor Shoot</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Category Filter *</label>
+                                    <select id="newShootFilter" required>
+                                        <option value="maternity-baby">Baby & Maternity</option>
+                                        <option value="matrimonial-profile">Matrimonial & Portraits</option>
+                                        <option value="themes-cultural">Themes & Cultural</option>
+                                        <option value="all">General Shoot</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Theme Badge Tag (Optional)</label>
+                                    <input type="text" id="newShootTheme" placeholder="e.g. Grand Entry / Celebration">
+                                </div>
+                                <div class="form-group" style="grid-column: 1 / -1; margin: 0;">
+                                    <label>Description Paragraph *</label>
+                                    <textarea id="newShootDesc" rows="2" required placeholder="Describe the shoot experience, setup, and lighting..."></textarea>
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Shoot Photo *</label>
+                                    <input type="file" id="newShootImgFile" accept="image/*" required>
+                                </div>
+                                <div style="display: flex; align-items: flex-end;">
+                                    <button type="submit" class="btn btn-gold full-width" id="addShootBtn" style="height: 44px;">
+                                        <i class="fa-solid fa-plus"></i> ADD TO INDOOR/OUTDOOR SHOOTS
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;">EXISTING SPECIALIZED SHOOT CARDS (SUPABASE)</h4>
+                        <div id="adminShootsList">
+                            <!-- Populated dynamically from Supabase -->
+                        </div>
+                    </div>
+
+                    <!-- Tab 6: Portfolio Gallery Manager -->
+                    <div class="admin-tab-pane" id="tabPortfolio">
+                        <h3>Portfolio Gallery Manager (Supabase DB & Storage)</h3>
+                        
+                        <!-- Add New Portfolio Photo Box -->
+                        <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--gold-primary); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                            <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;"><i class="fa-solid fa-plus-circle"></i> ADD NEW PORTFOLIO PHOTO</h4>
+                            <form onsubmit="addNewPortfolioPhoto(event)" style="display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: flex-end;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Photo Title *</label>
+                                    <input type="text" id="newPortTitle" required placeholder="e.g. Royal Bridal Shoot">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Category *</label>
+                                    <select id="newPortCategory" required>
+                                        <option value="weddings">Weddings</option>
+                                        <option value="prewedding">Pre-Wedding</option>
+                                        <option value="baby">Baby & Family</option>
+                                        <option value="events">Events</option>
+                                        <option value="portraits">Portraits</option>
+                                        <option value="fashion">Fashion</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Image File *</label>
+                                    <input type="file" id="newPortImgFile" accept="image/*" required>
+                                </div>
+                                <button type="submit" class="btn btn-gold" style="height: 44px;">
+                                    <i class="fa-solid fa-upload"></i> ADD PHOTO
+                                </button>
+                            </form>
+                        </div>
+
+                        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;">PORTFOLIO GALLERY ITEMS (SUPABASE)</h4>
+                        <div id="adminPortfolioList" class="portfolio-grid">
+                            <!-- Populated dynamically from Supabase -->
+                        </div>
+                    </div>
+
+                    <!-- Tab 7: Same Day Gifts Manager -->
+                    <div class="admin-tab-pane" id="tabGifts">
+                        <h3>Same Day Gifts Page (`gifts.html`) Manager</h3>
+                        <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--gold-primary); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                            <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;"><i class="fa-solid fa-plus-circle"></i> ADD NEW GIFT PRODUCT</h4>
+                            <form onsubmit="addNewGiftItem(event)" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 15px; align-items: flex-end;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Gift Product Name *</label>
+                                    <input type="text" id="newGiftTitle" required placeholder="e.g. Photo Wall Clock">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label>Gift Image File *</label>
+                                    <input type="file" id="newGiftImgFile" accept="image/*" required>
+                                </div>
+                                <button type="submit" class="btn btn-gold" style="height: 44px;">
+                                    <i class="fa-solid fa-plus"></i> ADD GIFT ITEM
+                                </button>
+                            </form>
+                        </div>
+
+                        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;">EXISTING GIFT PRODUCTS (SUPABASE)</h4>
+                        <div id="adminGiftsList" class="gifts-grid">
+                            <!-- Populated dynamically from Supabase -->
+                        </div>
+                    </div>
+
+                    <!-- Tab 8: Packages Manager -->
+                    <div class="admin-tab-pane" id="tabPackages">
+                        <h3>Packages Page (`packages.html`) Manager</h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 25px;">Upload your official Package Catalogue PDF directly to Supabase Cloud Storage and edit package tier details.</p>
+                        
+                        <!-- Upload PDF Catalogue Box -->
+                        <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--gold-primary); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                            <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 12px;">
+                                <i class="fa-solid fa-file-pdf" style="color: #ff4757;"></i> UPLOAD PACKAGE CATALOGUE PDF (SUPABASE STORAGE)
+                            </h4>
+                            <form onsubmit="saveCataloguePDFUpload(event)" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                                <div class="form-group" style="margin: 0; flex: 1;">
+                                    <label>Select Catalogue PDF File (.pdf)</label>
+                                    <input type="file" id="pdfCatalogueFile" accept=".pdf,application/pdf" required>
+                                </div>
+                                <button type="submit" class="btn btn-gold" style="height: 44px; margin-top: 20px;">
+                                    <i class="fa-solid fa-upload"></i> UPLOAD CATALOGUE PDF
+                                </button>
+                            </form>
+                            <p id="pdfStatusMsg" style="font-size: 0.82rem; color: var(--gold-primary); margin-top: 10px;"></p>
+                        </div>
+
+                        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 15px;">EDIT WEDDING & SHOOT PACKAGES CONTENT</h4>
+                        <div id="adminPackagesList">
+                            <!-- Populated dynamically from Supabase -->
+                        </div>
+                    </div>
+
+                    <!-- Tab 9: Contact Page Manager -->
+                    <div class="admin-tab-pane" id="tabContactPage">
+                        <h3>Contact Page (`contact.html`) Manager</h3>
+                        <form onsubmit="saveContactPageSettings(event)">
+                            <div class="form-group">
+                                <label>Google Maps Embed iFrame Link</label>
+                                <textarea id="editContactMapLink" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-gold">
+                                <i class="fa-solid fa-floppy-disk"></i> SAVE CONTACT PAGE TO SUPABASE
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tab 10: Bookings Log -->
+                    <div class="admin-tab-pane" id="tabBookings">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <h3>Customer Enquiries & Shoot Bookings (Live Supabase DB)</h3>
+                            <button class="btn btn-gold" onclick="loadAdminBookings()" style="font-size: 0.8rem; padding: 6px 14px;">
+                                <i class="fa-solid fa-rotate"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+                            <table class="admin-table" style="min-width: 600px;">
+                                <thead>
+                                    <tr>
+                                        <th>Client Name</th>
+                                        <th>Phone</th>
+                                        <th>Service / Shoot</th>
+                                        <th>Event Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminBookingsTable">
+                                    <!-- Populated dynamically from Supabase -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tab 11: Change Admin Password -->
+                    <div class="admin-tab-pane" id="tabSecurity">
+                        <h3>Change Admin Password (Stored in Supabase)</h3>
+                        <form onsubmit="handleChangePassword(event)" style="max-width: 400px;">
+                            <div class="form-group">
+                                <label>Current Admin Password *</label>
+                                <input type="password" id="currentPass" required placeholder="Current Password">
+                            </div>
+                            <div class="form-group">
+                                <label>New Password *</label>
+                                <input type="password" id="newPass" required placeholder="New Password">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm New Password *</label>
+                                <input type="password" id="confirmPass" required placeholder="Confirm New Password">
+                            </div>
+                            <button type="submit" class="btn btn-gold full-width">
+                                <i class="fa-solid fa-key"></i> UPDATE PASSWORD IN SUPABASE
+                            </button>
+                        </form>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Shoot Category Modal -->
+    <div class="modal" id="editShootModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="modal-close" onclick="closeEditShootModal()">&times;</span>
+            <div class="modal-header">
+                <div class="gold-icon"><i class="fa-solid fa-pen-to-square"></i></div>
+                <h3>EDIT SHOOT CATEGORY</h3>
+                <p>Update title, descriptions, tags, and replace photo in Supabase Cloud.</p>
+            </div>
+
+            <form onsubmit="saveEditedShootCategory(event)">
+                <input type="hidden" id="editShootId">
+                <input type="hidden" id="editShootCurrentImageUrl">
+
+                <div class="form-group">
+                    <label>Shoot Title *</label>
+                    <input type="text" id="editShootTitle" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Location Badge *</label>
+                        <select id="editShootLocation" required>
+                            <option value="Indoor Studio">Indoor Studio</option>
+                            <option value="Outdoor Shoot">Outdoor Shoot</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Filter Category *</label>
+                        <select id="editShootFilter" required>
+                            <option value="maternity-baby">Baby & Maternity</option>
+                            <option value="matrimonial-profile">Matrimonial & Portraits</option>
+                            <option value="themes-cultural">Themes & Cultural</option>
+                            <option value="all">General Shoot</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Theme Badge Tag (e.g. Baby Milestone, Retro Theme)</label>
+                    <input type="text" id="editShootTheme">
+                </div>
+
+                <div class="form-group">
+                    <label>Shoot Description Paragraph *</label>
+                    <textarea id="editShootDesc" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Current Shoot Photo Preview</label>
+                    <div>
+                        <img id="editShootImgPreview" src="" alt="Current Shoot Image" style="width: 100%; max-height: 160px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gold-primary); margin-bottom: 8px;">
+                    </div>
+                    <label>Upload New Photo (JPG / PNG) - Optional</label>
+                    <input type="file" id="editShootImgFile" accept="image/*">
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-gold full-width" id="saveEditShootBtn">
+                        <i class="fa-solid fa-floppy-disk"></i> SAVE CHANGES TO SUPABASE
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="closeEditShootModal()" style="padding: 10px 20px;">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
